@@ -1,0 +1,88 @@
+var natureHomme = ["Sport", "Déguisements", "Pantalons", "Maillots de bain", "Costumes et Blazers", "Shorts", "Chaussures",
+                   "Chemises", "T-Shirt-Polos", "Pulls-Cardigans", "Jeans", "Manteaux-Vestes", "Sacs", "Accessoires", "Sweat-Shirts"];
+var natureFemme = ["Sport", "Déguisements", "Pantalons", "Maillots de bain", "Ensembles et Tailleurs", "Shorts", "Chaussures",
+                   "Chemises", "T-Shirt-Débardeurs", "Tops", "Pulls-Cardigans", "Jeans", "Manteaux-Vestes", "Sacs", "Accessoires",
+                   "Sweat-Shirts", "Robes-Jupes"];
+
+var sweat_shirts = ["Sweats à capuche", "Sweats unis", "Sweats imprimés", "Autres"];
+var accessories_homme = ["Ceintures", "Lunettes", "Gants", "Écharpes", "Cravates", "Portefeuilles", "Montres", "Autres"];
+var accessories_femme = ["Ceintures", "Lunettes", "Gants", "Écharpes/Foulards", "Portefeuille/Porte monnaie", "Autres"];
+var bags_homme = ["Sacs à dos", "Sacoches", "Sacs de voyage", "Autres"];
+var bags_femme = ["Pochettes", "Sacs à dos", "Sacs à main", "Sacs de voyage", "Autres"];
+var hat = ["Bonnets", "Casquettes", "Chapeaux", "Autres"];
+var coat_homme = ["Blousons en cuir", "Blousons", "Vestes", "Vestes en jean", "Surchemises", "Manteaux d'hiver", "Manteaux mi-saison", "Autres"];
+var coat_femme = ["Blazers", "Blousons", "Blousons en cuir", "Vestes courtes", "Vestes en jean", "Manteaux d'hiver", "Manteaux mi-saison", "Autres"];
+var jean_homme = ["Large", "Droit", "Slim", "Autres"];
+var jean_femme = ["Bootcut", "Large", "Slim", "Droit", "Taille haute", "Autres"];
+var pull = ["Pulls unis", "Pulls à motifs", "Cardigans unis", "Cardigans à motifs", "Tricots unis", "Tricots à motifs", "Autres"];
+var shoe_homme = ["Chaussures de ville", "Bottes/Bottines", "Baskets/Sneakers", "Autres"];
+var shoe_femme = ["Bottes/Bottines", "Mocassins", "Ballerines" ,"Sandales", "Sabots", "Derbies", "Escarpins", "Boots", "Baskets/Sneakers", "Autres"];
+var short_homme = ["Courts", "Bermudas", "Autres"];
+var short_femme = ["Shorts", "Shorts en Jean", "Minishorts", "Combishort", "Autres"];
+var swimingsuit_homme = ["Slips", "Shorts", "Bermudas", "Autres"];
+var swimingsuit_femme = ["2 Pièces", "1 Pièce", "Dépareillés", "Vêtements de plage", "Autres"];
+var trousers_homme = ["Chino", "Velours", "Joggings", "Salopettes", "Autres"];
+var trousers_femme = ["Droits", "Évasés", "Slim", "Sarouel/Carotte", "Tregging", "Leggings", "Salopettes", "Combinaisons", "Autres"];
+var disguise = ["Classique"];
+var sport = ["Maillots équipe de sports", "Chaussures de sport", "Vêtements de sport", "Accessoires", "Autres"];
+var polos = ["Tshirt uni", "Tshirt à motifs", "Débardeurs unis", "Débardeurs à Motifs", "Polos unis", "Polos à Motifs", "Les imprimés", "Autres"];
+var shirt = ["Décontractées", "Habillées", "Chemisettes", "Autres"];
+var suits_homme = ["Costumes", "Vestes de costume", "Blazers", "Pantalons", "Chemises de Costume", "Autres"];
+var suits_femme = ["Ensemble", "Tailleur", "Pantalon de costume", "Autres"];
+var dresses = ["Mini jupes", "Jupes courtes", "Jupes mi-longues", "jupes en jean", "Robes courtes", "Robes longues", "Robes mi-longues", "Dos nu", "Tuniques", "Bustiers", "Autres"];
+var tops = ["Sans-manches unis", "Sans-manches à motifs", "Manches courtes unis", "Manches courtes à motifs", "Manches longues unis", "Manches longues à motifs", "Chemises et surchemisiers", "Les imprimés", "Hauts de soirées", "Autres"];
+var bijoux = ["Montres", "Bracelets", "Boucles d'oreilles", "Accessoires cheveux", "Colliers/Pendentifs", "Bagues", "Autres"];
+
+function returnType(gender, nature){
+    var tableau = [];
+    if(gender.toLowerCase() == "homme"){
+        switch(nature){
+            case "Sport": tableau = sport; break;
+            case "Déguisements" : tableau = disguise; break;
+            case "Pantalons" : tableau = trousers_homme; break;
+            case "Maillots%20de%20bain" : tableau = swimingsuit_homme; break;
+            case "Maillots de bain" : tableau = swimingsuit_homme; break;
+            case "Costumes%20et%20Blazers" : tableau = suits_homme; break;
+            case "Costumes et Blazers" : tableau = suits_homme; break;
+            case "Shorts" : tableau = short_homme; break;
+            case "Chaussures" : tableau = shoe_homme; break;
+            case "Chemises" : tableau = shirt; break;
+            case "T-Shirt-Polos" : tableau = polos; break;
+            case "Pulls-Cardigans" : tableau = pull; break;
+            case "Jeans" : tableau = jean_homme; break;
+            case "Manteaux-Vestes" : tableau = coat_homme; break;
+            case "Couvres-Chefs" : tableau = hat; break;
+            case "Sacs" : tableau = bags_homme; break;
+            case "Accessoires" : tableau = accessories_homme; break;
+            case "Sweat-Shirts" : tableau = sweat_shirts; break;
+        }
+    }
+    else if(gender.toLowerCase() == "femme"){
+        switch(nature){
+            case "Accessoires" : tableau = accessories_femme; break;
+            case "Déguisements" : tableau = disguise; break;
+            case "Chemises" : tableau = shirt; break;
+            case "Sacs" : tableau = bags_femme; break;
+            case "Manteaux-Vestes" : tableau = coat_femme; break;
+            case "Jeans" : tableau = jean_femme; break;
+            case "Robes-Jupes" : tableau = dresses; break;
+            case "Sweat-Shirts" : tableau = sweat_shirts; break;
+            case "Debardeurs": tableau = shirt; break;
+            case "Tops": tableau = tops; break;
+            case "Pulls-Cardigans" : tableau = pull; break;
+            case "Bijoux" : tableau = bijoux; break;
+            case "Ensembles%20et%20Tailleurs" : tableau = suits_femme; break;
+            case "Ensembles et Tailleurs" : tableau = suits_femme; break;
+            case "Maillots%20de%20bain" : tableau = swimingsuit_homme; break;
+            case "Maillots de bain" : tableau = swimingsuit_homme; break;
+            case "Pantalons" : tableau = trousers_homme; break;
+            case "Shorts" : tableau = short_femme; break;
+            case "Chaussures" : tableau = shoe_femme; break;
+            case "T-Shirt-Débardeurs" : tableau = polos; break;
+            case "Sport": tableau = sport; break;
+            case "Deguisements" : tableau = disguise; break;
+            case "Couvres-Chefs" : tableau = hat; break;
+        }
+    }
+    return tableau;
+}
