@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "InspirationViewController.h"
 #import "CameraCustom2View.h"
+#import "UIImage+fixOrientation.h"
 
 @interface HomeViewController ()
 {
@@ -184,7 +185,8 @@
     {
         if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
         {
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            UIImage *image = [[info objectForKey:UIImagePickerControllerOriginalImage] fixOrientation];
+            NSLog(@"orientation : %d",image.imageOrientation);
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             InspirationViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"InspirationViewController"];
             vc.pictureTaked = image;

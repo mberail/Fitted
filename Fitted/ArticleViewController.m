@@ -11,43 +11,21 @@
 #import "ALAssetViewController.h"
 #import "WebServices.h"
 #import "ImageCache.h"
+#import "UIImage+fixOrientation.h"
+#import "SVProgressHUD.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface ArticleViewController ()
 {
     UIImagePickerController *imagePicker;
-    
-    /*UITextField *titreTextField;
-    UIButton *genreBouton;
-    UILabel *genreLabelPicker;
-    UILabel *genreLabel;
-    UIButton *natureBouton;
-    UILabel *natureLabelPicker;
-    UILabel *natureLabel;
-    UIButton *typeBouton;
-    UILabel *typeLabelPicker;
-    UILabel *typeLabel;
-    UITextField *tailleTextField;
-    UITextField *marqueTextField;
-    UIImageView *couleurImage;
-    UILabel *colorLabel;*/
     UICollectionView *collectionColor;
-    //UITextField *prixTextField;
     UICollectionView *collectionPhoto;
-    //UIImageView *photoImage;
-    //UIButton *photoBouton;
     UILabel *photoLabel;
-    //UIImageView *produitsImage;
     UICollectionView *collectionProduits;
     UILabel *produitsLabel;
-    /*UIButton *produitsBouton;
-    UIButton *saisonBouton;
-    UILabel *saisonLabelPicker;
-    UILabel *saisonLabel;
-    UIImageView *textViewImage;
     UITextView *detailTextView;
-    UIButton *validerBouton;*/
+    UIImageView *textViewImage;
     
     NSMutableArray *allElements;
     NSMutableArray *imageTextFields;
@@ -292,10 +270,6 @@
     collectionPhoto.backgroundColor = [UIColor clearColor];
     [self.scrollView addSubview:collectionPhoto];
     
-    /*photoImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 696, 280, 48)];
-    photoImage.image = [UIImage imageNamed:@"BOUTON MD SEUL.png"];
-    [self.scrollView addSubview:photoImage];*/
-    
     UIButton *photoBouton = [UIButton buttonWithType:UIButtonTypeCustom];
     photoBouton.frame = CGRectMake(20, 696, 280, 48);
     [photoBouton setBackgroundImage:[UIImage imageNamed:@"BOUTON MD SEUL.png"] forState:UIControlStateNormal];
@@ -316,10 +290,6 @@
     collectionProduits.backgroundColor = [UIColor clearColor];
     [self.scrollView addSubview:collectionProduits];
     
-    /*produitsImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 754, 280, 48)];
-    produitsImage.image = [UIImage imageNamed:@"BOUTON MD SEUL.png"];
-    [self.scrollView addSubview:produitsImage];*/
-    
     UIButton *produitsBouton = [UIButton buttonWithType:UIButtonTypeCustom];
     produitsBouton.frame = CGRectMake(20, 754, 280, 48);
     [produitsBouton setBackgroundImage:[UIImage imageNamed:@"BOUTON MD SEUL.png"] forState:UIControlStateNormal];
@@ -332,13 +302,11 @@
     produitsLabel.textColor = [UIColor colorWithWhite:0.25 alpha:1];
     [self.scrollView addSubview:produitsLabel];
     
-    UIImageView *textViewImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 812, 280, 165)];
+    textViewImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 812, 280, 165)];
     textViewImage.image = [UIImage imageNamed:@"LAIUS.png"];
     [self.scrollView addSubview:textViewImage];
     
-    UITextView *detailTextView = [[UITextView alloc] initWithFrame:CGRectMake(30, 822, 260, 145)];
-    //detailTextView.text = @"   Laïus_";
-    //detailTextView.textColor = [UIColor colorWithWhite:0.75 alpha:1];
+    detailTextView = [[UITextView alloc] initWithFrame:CGRectMake(30, 822, 260, 145)];
     detailTextView.font = [UIFont systemFontOfSize:15];
     detailTextView.backgroundColor = [UIColor clearColor];
     detailTextView.delegate = self;
@@ -354,9 +322,9 @@
     
     [self.scrollView setContentSize:CGSizeMake(320, 1055)];
     
-    allElements = [[NSMutableArray alloc] initWithObjects:titreImage,titreTextField,genreBouton,genreLabelPicker,genreLabel,natureBouton,natureLabelPicker,natureLabel,typeBouton,typeLabelPicker,typeLabel,tailleImage,tailleTextField,marqueImage,marqueTextField,couleurImage,colorLabel,collectionColor,prixImage,prixTextField,saisonBouton,saisonLabelPicker,saisonLabel,collectionPhoto,/*photoImage,*/photoBouton,photoLabel,collectionProduits,/*produitsImage,*/produitsLabel,produitsBouton,textViewImage,detailTextView,validerBouton, nil];
+    allElements = [[NSMutableArray alloc] initWithObjects:titreImage,titreTextField,genreBouton,genreLabelPicker,genreLabel,natureBouton,natureLabelPicker,natureLabel,typeBouton,typeLabelPicker,typeLabel,tailleImage,tailleTextField,marqueImage,marqueTextField,couleurImage,colorLabel,collectionColor,prixImage,prixTextField,saisonBouton,saisonLabelPicker,saisonLabel,collectionPhoto,photoBouton,photoLabel,collectionProduits,produitsLabel,produitsBouton,textViewImage,detailTextView,validerBouton, nil];
     arrayLabels = [NSArray arrayWithObjects:genreLabelPicker,natureLabelPicker,typeLabelPicker,saisonLabelPicker, nil];
-    textFields = [NSArray arrayWithObjects:titreTextField,tailleTextField,marqueTextField,prixTextField,detailTextView, nil];
+    textFields = [NSArray arrayWithObjects:titreTextField,tailleTextField,marqueTextField,prixTextField, nil];
     imageTextFields = [[NSMutableArray alloc] initWithObjects:titreImage,tailleImage,marqueImage,prixImage, nil];
 }
 
@@ -660,16 +628,32 @@
 - (void)proceedWithAddProduct
 {
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    NSArray *nameTextFields = [NSArray arrayWithObjects:@"name",@"size",@"brand",@"price",@"description", nil];
+    NSArray *nameTextFields = [NSArray arrayWithObjects:@"name",@"size",@"brand",@"price", nil];
     NSArray *nameLabels = [NSArray arrayWithObjects:@"gender",@"nature",@"type",@"season", nil];
     for (int i = 0; i < textFields.count; i++)
     {
+        if (![[imageTextFields[i] image] isEqual:[UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"]])
+        {
+            [[[UIAlertView alloc] initWithTitle:@"Champs incorrects" message:@"Veuillez compléter correctement tous les champs de texte. (Cadre vert)" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            return;
+        }
         [parameters setObject:[textFields[i] text] forKey:nameTextFields[i]];
     }
     for (int j = 0; j < arrayLabels.count; j++)
     {
+        if ([[arrayLabels[j] text] length] == 0)
+        {
+            [[[UIAlertView alloc] initWithTitle:@"Champs incomplets" message:@"Veuillez compléter correctement toutes les informations." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            return;
+        }
         [parameters setObject:[arrayLabels[j] text] forKey:nameLabels[j]];
     }
+    if (detailTextView.text.length == 0)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"Description manquante" message:@"Veuillez compléter une description de votre article." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
+    [parameters setObject:detailTextView.text forKey:@"description"];
     for (int k = 0; k < arrayColors.count; k++)
     {
         UIColor *colorTemp = arrayColors[k];
@@ -683,14 +667,15 @@
     {
         [idProducts addObject:[arrayProduits[l] objectForKey:@"id"]];
     }
+    if (arrayPhotos.count == 0)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"Photo manquante" message:@"Veuillez ajouter au moins une photo de votre article." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
     for (int m = 0; m < arrayPhotos.count; m++)
     {
-        [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(arrayPhotos[m], 1)] forKey:[NSString stringWithFormat:@"photo%i",m+1]];
+        [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(arrayPhotos[m], 0.5)] forKey:[NSString stringWithFormat:@"photo%i",m+1]];
     }
-    /*for (int n = 0; n < 5 - arrayPhotos.count; n++)
-    {
-        [parameters setObject:@"" forKey:[NSString stringWithFormat:@"photo%i",n+1+arrayPhotos.count]];
-    }*/
     [parameters setObject:idProducts forKey:@"products_id"];
     [parameters setObject:@"ios" forKey:@"device"];
     [self startAddProduct:parameters];
@@ -698,15 +683,26 @@
 
 - (void)startAddProduct:(NSDictionary *)products
 {
-    waitingDialog = [[UIAlertView alloc] initWithTitle:@"Ajout en cours .." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-    [waitingDialog show];
+    //waitingDialog = [[UIAlertView alloc] initWithTitle:@"Ajout en cours .." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    //[waitingDialog show];
+    [SVProgressHUD showWithStatus:@"Ajout en cours"];
     [self performSelector:@selector(addProductWebServices:) withObject:products afterDelay:0.3];
 }
 
 - (void)addProductWebServices:(NSDictionary *)products
 {
-    [WebServices addProduct:products with:arrayPhotos];
-    [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+    BOOL addProduct = [WebServices addProduct:products with:arrayPhotos];
+    //[waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+    [SVProgressHUD dismiss];
+    if (addProduct)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+        [SVProgressHUD showSuccessWithStatus:@"Ajout réussi"];
+    }
+    else
+    {
+        [SVProgressHUD showErrorWithStatus:@"Échec lors de l'ajout"];
+    }
 }
 
 #pragma mark - CameraCustom delegate
@@ -738,7 +734,7 @@
     {
         if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
         {
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            UIImage *image = [[info objectForKey:UIImagePickerControllerOriginalImage] fixOrientation];
             if (addPhotoOrProduits)
             {
                 //[arrayPhotos addObject:UIImagePNGRepresentation(image)];
@@ -864,7 +860,7 @@
             [[ImageCache sharedImageCache] addImage:thumbUrl with:imgCache];
         }
         UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height)];
-        imageV.contentMode = UIViewContentModeScaleAspectFill;
+        imageV.contentMode = UIViewContentModeScaleToFill;
         imageV.image = imgCache;
         [cell addSubview:imageV];
         UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -989,15 +985,6 @@
 
 #pragma mark - PickerView delegate
 
-/*- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    if (!alreadyDismiss)
-    {
-        alreadyDismiss = YES;
-        [self dismissPickerView:currentArray[row]];
-    }
-}*/
-
 - (void)dismissPickerView:(NSString *)text
 {
     UILabel *pickerLabel = [allElements objectAtIndex:indexOfBouton+1];
@@ -1055,7 +1042,7 @@
         }
         else
         {
-            NSString *expression = @"[A-Z'\\sa-zéèàùûêâôë-]{5,20}";
+            NSString *expression = @".{1,20}";
             NSError *error = nil;
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
             NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
@@ -1082,8 +1069,23 @@
         }
         else
         {
-            
-            [imageTextFields[1] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"]];
+            NSString *expression = @".{1,20}";
+            NSError *error = nil;
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
+            NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+            NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textField.text options:0 range:NSMakeRange(0, textField.text.length)];
+            if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
+            {
+                [imageTextFields[1] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"]];
+                if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+                {
+                    return NO;
+                }
+            }
+            else
+            {
+                [imageTextFields[1] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE ERREUR.png"]];
+            }
         }
     }
     else if (textField == textFields[2])
@@ -1094,7 +1096,7 @@
         }
         else
         {
-            NSString *expression = @"[A-Za-zéèàùûêâôë]{1,20}";
+            NSString *expression = @".{1,20}";
             NSError *error = nil;
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
             NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
@@ -1154,16 +1156,55 @@
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
+    textViewImage.image = [UIImage imageNamed:@"LAIUS-2.png"];
     return YES;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    NSString *newString = nil;
+    if (text.length == 0)
+    {
+        newString = [textView.text substringWithRange:NSMakeRange(0, textView.text.length-1)];
+    }
+    else
+    {
+        newString = [textView.text stringByAppendingString:text];
+    }
     if ([text isEqualToString:@"\n"])
     {
         [textView resignFirstResponder];
+        if (newString.length == 0)
+        {
+            textViewImage.image = [UIImage imageNamed:@"LAIUS.png"];
+        }
+    }
+    else
+    {
+        NSString *expression = @".{1,200}";
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
+        NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+        NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textView.text options:0 range:NSMakeRange(0, textView.text.length)];
+        if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
+        {
+            if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+            {
+                return NO;
+            }
+        }
     }
     [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 240)];
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    [textView resignFirstResponder];
+    if (textView.text.length == 0)
+    {
+        textViewImage.image = [UIImage imageNamed:@"LAIUS.png"];
+    }
     return YES;
 }
 

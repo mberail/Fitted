@@ -123,12 +123,29 @@
             imgCache = [UIImage imageWithData:imageData];
             [[ImageCache sharedImageCache] addImage:thumbUrl with:imgCache];
         }
+        cell.picture.image = imgCache;
+        NSArray *products = [[NSArray alloc] init];
+        if (fromInspiration)
+        {
+            InspirationViewController *ivc = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers indexOfObject:self.navigationController.viewControllers.lastObject] - 1];
+            products = ivc.arrayProduits;
+        }
+        else
+        {
+            ArticleViewController *avc = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers indexOfObject:self.navigationController.viewControllers.lastObject] - 1];
+            products = avc.arrayProduits;
+        }
+        NSLog(@"products : %@",products);
+        if ([products containsObject:assets[indexPath.row]])
+        {
+            cell.alpha = 0.2;
+        }
     }
     else
     {
         imgCache = [UIImage imageWithCGImage:[[assets objectAtIndex:assets.count - indexPath.row - 1] thumbnail]];
+        cell.picture.image = imgCache;
     }
-    cell.picture.image = imgCache;
     return cell;
 }
 
@@ -151,16 +168,22 @@
         if (fromInspiration)
         {
             InspirationViewController *ivc = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers indexOfObject:self.navigationController.viewControllers.lastObject] - 1];
-            [ivc.arrayProduits addObject:assets[indexPath.row]];
-            [self.navigationController popToViewController:ivc animated:YES];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"receivePictureInspiration" object:nil];
+            if (![ivc.arrayProduits containsObject:assets[indexPath.row]])
+            {
+                [ivc.arrayProduits addObject:assets[indexPath.row]];
+                [self.navigationController popToViewController:ivc animated:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"receivePictureInspiration" object:nil];
+            }
         }
         else
         {
             ArticleViewController *avc = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers indexOfObject:self.navigationController.viewControllers.lastObject] - 1];
-            [avc.arrayProduits addObject:assets[indexPath.row]];
-            [self.navigationController popToViewController:avc animated:YES];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"receivePictureArticle" object:nil];
+            if (![avc.arrayProduits containsObject:assets[indexPath.row]])
+            {
+                [avc.arrayProduits addObject:assets[indexPath.row]];
+                [self.navigationController popToViewController:avc animated:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"receivePictureArticle" object:nil];
+            }
         }
     }
     else

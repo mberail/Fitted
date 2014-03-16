@@ -21,6 +21,7 @@
 		6603095F186C4FEC00FD855E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6603095D186C4FEC00FD855E /* InfoPlist.strings */; };
 		66030961186C4FEC00FD855E /* FittedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66030960186C4FEC00FD855E /* FittedTests.m */; };
 		6612803D18B217B800AAB2CA /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 6612803B18B20BFB00AAB2CA /* data.json */; };
+		662833FA18D662A000EC3BA2 /* UIImage+fixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 662833F918D662A000EC3BA2 /* UIImage+fixOrientation.m */; };
 		662B073818B3A2D8009F07F2 /* WebServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 662B073718B3A2D8009F07F2 /* WebServices.m */; };
 		662B077718B6A92D009F07F2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662B077618B6A92D009F07F2 /* Security.framework */; };
 		662B077A18B6E14D009F07F2 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 662B077918B6E14D009F07F2 /* ImageCache.m */; };
@@ -59,6 +60,9 @@
 		666C2D0618C7530800AA3F31 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 666C2D0018C7530800AA3F31 /* libTestFlight.a */; };
 		666C2D0718C7530800AA3F31 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 666C2D0118C7530800AA3F31 /* README.md */; };
 		666C2D0818C7530800AA3F31 /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 666C2D0218C7530800AA3F31 /* release_notes.md */; };
+		66727A5918D4E22D002B2EC0 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 66727A5618D4E22D002B2EC0 /* SVProgressHUD.bundle */; };
+		66727A5A18D4E22D002B2EC0 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 66727A5818D4E22D002B2EC0 /* SVProgressHUD.m */; };
+		66727A5C18D4E70B002B2EC0 /* LAIUS-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66727A5B18D4E70B002B2EC0 /* LAIUS-2@2x.png */; };
 		66CDC2D5187E1BE20088F15A /* FLECHE DROITE PAGE ACCUEIL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66CDC2D3187E1BE20088F15A /* FLECHE DROITE PAGE ACCUEIL@2x.png */; };
 		66CDC2D6187E1BE20088F15A /* FLECHE GAUCHE PAGE ACCUEIL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66CDC2D4187E1BE20088F15A /* FLECHE GAUCHE PAGE ACCUEIL@2x.png */; };
 		66CDC2E4187E21C00088F15A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66CDC2E3187E21C00088F15A /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -114,6 +118,8 @@
 		6603095E186C4FEC00FD855E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		66030960186C4FEC00FD855E /* FittedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FittedTests.m; sourceTree = "<group>"; };
 		6612803B18B20BFB00AAB2CA /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
+		662833F818D662A000EC3BA2 /* UIImage+fixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+fixOrientation.h"; sourceTree = "<group>"; };
+		662833F918D662A000EC3BA2 /* UIImage+fixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+fixOrientation.m"; sourceTree = "<group>"; };
 		662B073618B3A2D8009F07F2 /* WebServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServices.h; sourceTree = "<group>"; };
 		662B073718B3A2D8009F07F2 /* WebServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebServices.m; sourceTree = "<group>"; };
 		662B077618B6A92D009F07F2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -162,6 +168,10 @@
 		666C2D0318C7530800AA3F31 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
 		666C2D0418C7530800AA3F31 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		666C2D0518C7530800AA3F31 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		66727A5618D4E22D002B2EC0 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		66727A5718D4E22D002B2EC0 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		66727A5818D4E22D002B2EC0 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		66727A5B18D4E70B002B2EC0 /* LAIUS-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LAIUS-2@2x.png"; sourceTree = "<group>"; };
 		66CDC2D3187E1BE20088F15A /* FLECHE DROITE PAGE ACCUEIL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FLECHE DROITE PAGE ACCUEIL@2x.png"; sourceTree = "<group>"; };
 		66CDC2D4187E1BE20088F15A /* FLECHE GAUCHE PAGE ACCUEIL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FLECHE GAUCHE PAGE ACCUEIL@2x.png"; sourceTree = "<group>"; };
 		66CDC2E3187E21C00088F15A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -236,6 +246,7 @@
 				663307C718D0BCA80021D88D /* Icon.png */,
 				663307C818D0BCA80021D88D /* Icon-7@2x.png */,
 				663307C918D0BCA80021D88D /* Icon@2x.png */,
+				66727A5518D4E22D002B2EC0 /* SVProgressHUD */,
 				666C2CFF18C7530800AA3F31 /* TestFlightSDK3.0.0 */,
 				664059FF18763A5C00BA60F7 /* ELEMENTS APPLI */,
 				6603093B186C4FEB00FD855E /* Fitted */,
@@ -323,6 +334,8 @@
 				662B073718B3A2D8009F07F2 /* WebServices.m */,
 				662B077818B6E14D009F07F2 /* ImageCache.h */,
 				662B077918B6E14D009F07F2 /* ImageCache.m */,
+				662833F818D662A000EC3BA2 /* UIImage+fixOrientation.h */,
+				662833F918D662A000EC3BA2 /* UIImage+fixOrientation.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -331,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				66E5257D18C4AF4C00DDBF9B /* LAIUS@2x.png */,
+				66727A5B18D4E70B002B2EC0 /* LAIUS-2@2x.png */,
 				66E5257F18C4B00700DDBF9B /* FACEBOOK@2x.png */,
 				66405A35187640AB00BA60F7 /* HEADER-7@2x.png */,
 				66405A371876F50100BA60F7 /* HEADER-@2x.png */,
@@ -378,6 +392,16 @@
 				666C2D0518C7530800AA3F31 /* TestFlight.h */,
 			);
 			path = TestFlightSDK3.0.0;
+			sourceTree = "<group>";
+		};
+		66727A5518D4E22D002B2EC0 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				66727A5618D4E22D002B2EC0 /* SVProgressHUD.bundle */,
+				66727A5718D4E22D002B2EC0 /* SVProgressHUD.h */,
+				66727A5818D4E22D002B2EC0 /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
 		66CDC2EA18800A920088F15A /* ALAssets */ = {
@@ -482,6 +506,11 @@
 				TargetAttributes = {
 					66030931186C4FEB00FD855E = {
 						DevelopmentTeam = VK9D7BFE2C;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					66030952186C4FEC00FD855E = {
 						TestTargetID = 66030931186C4FEB00FD855E;
@@ -539,6 +568,7 @@
 				663307CA18D0BCA80021D88D /* Icon.png in Resources */,
 				66FEBA681889E177001A52E1 /* IMG_0315@2x.JPG in Resources */,
 				66405A2918763A5C00BA60F7 /* BOUTON PLUS@2x.png in Resources */,
+				66727A5918D4E22D002B2EC0 /* SVProgressHUD.bundle in Resources */,
 				66405A2418763A5C00BA60F7 /* BOUTON MD OK SELECTION@2x.png in Resources */,
 				66CDC2D5187E1BE20088F15A /* FLECHE DROITE PAGE ACCUEIL@2x.png in Resources */,
 				66405A381876F50100BA60F7 /* HEADER-@2x.png in Resources */,
@@ -553,6 +583,7 @@
 				66405A2118763A5C00BA60F7 /* BOUTON CROIX@2x.png in Resources */,
 				66405A2718763A5C00BA60F7 /* BOUTON PELLICULE@2x.png in Resources */,
 				663307CB18D0BCA80021D88D /* Icon-7@2x.png in Resources */,
+				66727A5C18D4E70B002B2EC0 /* LAIUS-2@2x.png in Resources */,
 				66E5258418C4B23300DDBF9B /* Default@2x.png in Resources */,
 				66E3B11D18A24FAA00310D31 /* PICTO PHOTO@2x.png in Resources */,
 				666C2D0718C7530800AA3F31 /* README.md in Resources */,
@@ -580,6 +611,8 @@
 				66030946186C4FEB00FD855E /* AppDelegate.m in Sources */,
 				66030942186C4FEB00FD855E /* main.m in Sources */,
 				66CDC2F618800AFF0088F15A /* ALGroupViewController.m in Sources */,
+				66727A5A18D4E22D002B2EC0 /* SVProgressHUD.m in Sources */,
+				662833FA18D662A000EC3BA2 /* UIImage+fixOrientation.m in Sources */,
 				66CDC2F518800AFF0088F15A /* ALGroupCell.m in Sources */,
 				66CDC2F418800AFF0088F15A /* ALAssetViewController.m in Sources */,
 				66405A411879ABBA00BA60F7 /* InspirationViewController.m in Sources */,
@@ -673,7 +706,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -706,7 +739,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -727,6 +760,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fitted/Fitted-Prefix.pch";
 				INFOPLIST_FILE = "Fitted/Fitted-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/mberail/Documents/iOS/Fitted/TestFlightSDK2.0.2,
@@ -753,6 +787,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fitted/Fitted-Prefix.pch";
 				INFOPLIST_FILE = "Fitted/Fitted-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/mberail/Documents/iOS/Fitted/TestFlightSDK2.0.2,

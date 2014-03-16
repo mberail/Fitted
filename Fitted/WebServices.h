@@ -12,6 +12,7 @@
 
 + (NSString *)base64forData:(NSData *)theData;
 + (BOOL)login:(NSArray *)parameters;
++ (BOOL)loginFacebook:(NSString *)idFacebook;
 + (id)sendDataByGetAtUrl:(NSString *)url;
 + (BOOL)addProduct:(NSDictionary *)parameters with:(NSArray *)photos;
 + (BOOL)addInspiration:(NSDictionary *)parameters with:(NSArray *)photos;

@@ -104,9 +104,8 @@
     NSHTTPURLResponse *response = nil;
     NSError *errors = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&errors];
-    NSLog(@"response : %@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
-    NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
-    return dictData;
+    NSLog(@"responsePost : %@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+    return responseData;
 }
 
 + (id)sendDataByGetAtUrl:(NSString *)url
@@ -122,15 +121,21 @@
     NSHTTPURLResponse *response = nil;
     NSError *errors = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&errors];
+    NSLog(@"responseGet : %@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
     return responseData;
 }
 
 + (BOOL)login:(NSArray *)parameters
 {
     NSString *urlGet = [NSString stringWithFormat:@"%@connect/connectIphone?COemail_address=%@&COpassword=%@",kURL,parameters[0],parameters[1]];
-    NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:[self sendDataByGetAtUrl:urlGet] options:NSJSONReadingMutableContainers error:nil];
-    if (dictData != nil)
+    if ([self sendDataByGetAtUrl:urlGet] != nil)
     {
+        NSString *stringData = [[NSString alloc] initWithData:[self sendDataByGetAtUrl:urlGet] encoding:NSUTF8StringEncoding];
+        if ([stringData isEqualToString:@"not ok"])
+        {
+            return 0;
+        }
+        NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:[self sendDataByGetAtUrl:urlGet] options:NSJSONReadingMutableContainers error:nil];
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
         [pref setInteger:[[dictData objectForKey:@"id"] integerValue] forKey:@"id"];
         [pref setObject:[dictData objectForKey:@"pseudo"] forKey:@"pseudo"];
@@ -145,6 +150,19 @@
     }
 }
 
++ (BOOL)loginFacebook:(NSString *)idFacebook
+{
+    NSString *urlPost = [NSString stringWithFormat:@"%@connect/facebookConnectMobile",kURL];
+    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] init];
+    [mutDict setObject:idFacebook forKey:@"user_profile"];
+    if ([self sendDataByPost:mutDict atUrl:urlPost with:nil] != nil)
+    {
+        return 1;
+    }
+    else
+        return 0;
+}
+
 + (void)logout
 {
     NSString *urlGet = [NSString stringWithFormat:@"%@connect/deconnexion",kURL];
@@ -154,18 +172,20 @@
 + (void)getProductsFromUser:(NSString *)pseudo
 {
     NSString *urlGet = [NSString stringWithFormat:@"%@search/loadThumbProduct?sh_owner=%@",kURL,pseudo];
-    NSLog(@"url : %@",urlGet);
-    NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:[self sendDataByGetAtUrl:urlGet] options:NSJSONReadingMutableContainers error:nil];
-    NSArray *temp = [[NSArray alloc] init];
-    if ([[dictData objectForKey:@"prodfile"] count] > 0)
+    if ([self sendDataByGetAtUrl:urlGet] != nil)
     {
-        temp = [dictData objectForKey:@"prodfile"];
+        NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:[self sendDataByGetAtUrl:urlGet] options:NSJSONReadingMutableContainers error:nil];
+        NSArray *temp = [[NSArray alloc] init];
+        if ([[dictData objectForKey:@"prodfile"] count] > 0)
+        {
+            temp = [dictData objectForKey:@"prodfile"];
+        }
+        NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+        [pref setObject:temp forKey:@"link_products"];
+        NSLog(@"products : %i",temp.count);
+        
+        [self cacheThumbProducts:temp];
     }
-    NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
-    [pref setObject:temp forKey:@"link_products"];
-    NSLog(@"products : %i",temp.count);
-    
-    [self cacheThumbProducts:temp];
 }
 
 + (void)cacheThumbProducts:(NSArray *)products
@@ -189,17 +209,20 @@
 + (BOOL)addProduct:(NSDictionary *)parameters with:(NSArray *)photos
 {
     NSString *postUrl = [NSString stringWithFormat:@"%@product/add",kURL];
-    [self sendDataByPost:parameters atUrl:postUrl with:photos];
-    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-    [self getProductsFromUser:[preferences objectForKey:@"pseudo"]];
-    return 1;
+    NSString *stringData = [[NSString alloc] initWithData:[self sendDataByPost:parameters atUrl:postUrl with:photos] encoding:NSUTF8StringEncoding];
+    if ([[stringData substringWithRange:NSMakeRange(stringData.length-1, 1)] intValue] == 1)
+    {
+        NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+        [self getProductsFromUser:[preferences objectForKey:@"pseudo"]];
+        return 1;
+    }
+    return 0;
 }
 
 + (BOOL)addInspiration:(NSDictionary *)parameters with:(NSArray *)photos
 {
     NSString *postUrl = [NSString stringWithFormat:@"%@inspiration/add",kURL];
     NSData *response = [self sendDataByPost:parameters atUrl:postUrl with:photos];
-    NSLog(@"response : %@",[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding]);
     return 1;
 }
 
@@ -207,16 +230,15 @@
 {
     NSString *getUrl = [NSString stringWithFormat:@"%@connect/amIConnected",kURL];
     NSData *response = [self sendDataByGetAtUrl:getUrl];
-    NSString *stringResponse = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
-    NSLog(@"response : %@",stringResponse);
-    if ([stringResponse isEqualToString:@"Connected"])
+    if (response != nil)
     {
-        return 1;
+        NSString *stringResponse = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+        if ([stringResponse isEqualToString:@"Connected"])
+        {
+            return 1;
+        }
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 @end

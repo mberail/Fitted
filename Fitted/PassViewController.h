@@ -10,4 +10,8 @@
 
 @interface PassViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageEmail;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+
+- (IBAction)getPassword:(id)sender;
 @end

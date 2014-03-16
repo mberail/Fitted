@@ -10,25 +10,18 @@
 #import "ALAssetViewController.h"
 #import "ImageCache.h"
 #import "WebServices.h"
+#import "SVProgressHUD.h"
 
 @interface InspirationViewController ()
 {
-    /*UITextField *titreTextField;
-    UITextField *tagTextField;
-    UIButton *tagBouton;
-    UIButton *categorieBouton;
-    UILabel *categorieLabel;
-    UILabel *categorieLabelPicker;
-    UIButton *addBouton;*/
     UICollectionView *collectionProduits;
     UILabel *produitsLabel;
-    /*UIButton *produitsBouton;
     UIImageView *textViewImage;
     UITextView *detailTextView;
-    UIButton *validerBouton;*/
     
     NSMutableArray *allElements;
     NSMutableArray *textFields;
+    NSMutableArray *imageTextFields;
     NSMutableArray *arrayLabels;
     NSArray *arrayData;
     
@@ -179,16 +172,16 @@
     [self.scrollView addSubview:produitsBouton];
     
     produitsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 294, 180, 48)];
-    produitsLabel.text = @"   Lier des articles";
+    produitsLabel.text = @"   Lier des articles (5)";
     produitsLabel.font = [UIFont systemFontOfSize:17];
     produitsLabel.textColor = [UIColor colorWithWhite:0.25 alpha:1];
     [self.scrollView addSubview:produitsLabel];
     
-    UIImageView *textViewImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 352, 280, 165)];
+    textViewImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 352, 280, 165)];
     textViewImage.image = [UIImage imageNamed:@"LAIUS.png"];
     [self.scrollView addSubview:textViewImage];
     
-    UITextView *detailTextView = [[UITextView alloc] initWithFrame:CGRectMake(20, 362, 280, 145)];
+    detailTextView = [[UITextView alloc] initWithFrame:CGRectMake(30, 362, 260, 145)];
     //detailTextView.text = @"   Laïus_";
     //detailTextView.textColor = [UIColor colorWithWhite:0.75 alpha:1];
     detailTextView.font = [UIFont systemFontOfSize:15];
@@ -208,7 +201,8 @@
     
     allElements = [[NSMutableArray alloc] initWithObjects:titreImage,titreTextField,tagImage,tagTextField,tagBouton,categorieBouton,categorieLabelPicker,categorieLabel,addBouton,collectionProduits,produitsBouton,produitsLabel,textViewImage,detailTextView,validerBouton, nil];
     
-    textFields = [[NSMutableArray alloc] initWithObjects:detailTextView,titreTextField,tagTextField,nil];
+    textFields = [[NSMutableArray alloc] initWithObjects:titreTextField,tagTextField,nil];
+    imageTextFields = [[NSMutableArray alloc] initWithObjects:titreImage,tagImage, nil];
     arrayLabels = [[NSMutableArray alloc] initWithObjects:categorieLabelPicker, nil];
 }
 
@@ -301,6 +295,7 @@
         UIImageView *tag2Image = [[UIImageView alloc] initWithFrame:CGRectMake(20, previousFrame.origin.y + 58, 280, 48)];
         tag2Image.image = [UIImage imageNamed:@"BOUTON CHAMP LIBRE.png"];
         [self.scrollView addSubview:tag2Image];
+        [imageTextFields addObject:tag2Image];
         
         UITextField *tagTextField2 = [[UITextField alloc] initWithFrame:CGRectMake(35, previousFrame.origin.y + 58, 260, 48)];
         tagTextField2.placeholder = @"#_";
@@ -330,6 +325,7 @@
 
 - (void)addCategory
 {
+    [self dismissPickerView:nil];
     int indexFirstBouton = 0;
     int indexLastBouton = 0;
     for (int i = 0; i < allElements.count; i++)
@@ -425,11 +421,15 @@
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     for (int i = 0; i < textFields.count; i++)
     {
-        if (i == 0)
+        if (![[imageTextFields[i] image] isEqual:[UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"]])
         {
-            [parameters setObject:[textFields[i] text] forKey:@"description"];
+            [[[UIAlertView alloc] initWithTitle:@"Champs incorrects" message:@"Veuillez compléter correctement tous les champs de texte. (Cadre vert)" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            return;
         }
-        else if (i == 1)
+    }
+    for (int i = 0; i < textFields.count; i++)
+    {
+        if (i == 0)
         {
             [parameters setObject:[textFields[i] text] forKey:@"title"];
         }
@@ -439,8 +439,19 @@
             [parameters setObject:[textFields[i] text] forKey:tempKey];
         }
     }
+    if (detailTextView.text.length == 0)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"Description manquante" message:@"Veuillez compléter une description de votre inspiration." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
+    [parameters setObject:detailTextView.text forKey:@"description"];
     for (int j = 0; j < arrayLabels.count; j++)
     {
+        if ([[arrayLabels[j] text] length] == 0)
+        {
+            [[[UIAlertView alloc] initWithTitle:@"Champs incomplets" message:@"Veuillez compléter correctement toutes les informations." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            return;
+        }
         NSString *tempKey = [NSString stringWithFormat:@"categorie%i",j+1];
         [parameters setObject:[arrayLabels[j] text] forKey:tempKey];
     }
@@ -449,24 +460,34 @@
     {
         [idProducts addObject:[arrayProduits[l] objectForKey:@"id"]];
     }
-    [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(self.pictureTaked, 1)] forKey:@"photo1"];
+    [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(self.pictureTaked, 0.5)] forKey:@"photo1"];
     [parameters setObject:idProducts forKey:@"products_id"];
     [parameters setObject:@"ios" forKey:@"device"];
-    NSLog(@"parameters : %@",parameters);
     [self startAddInspiration:parameters];
 }
 
 - (void)startAddInspiration:(NSDictionary *)products
 {
-    waitingDialog = [[UIAlertView alloc] initWithTitle:@"Ajout en cours .." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-    [waitingDialog show];
+    //waitingDialog = [[UIAlertView alloc] initWithTitle:@"Ajout en cours .." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    //[waitingDialog show];
+    [SVProgressHUD showWithStatus:@"Ajout en cours"];
     [self performSelector:@selector(addProductWebServices:) withObject:products afterDelay:0.3];
 }
 
 - (void)addProductWebServices:(NSDictionary *)products
 {
-    [WebServices addInspiration:products with:[NSArray arrayWithObject:self.pictureTaked]];
-    [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+    BOOL addProduct = [WebServices addProduct:products with:[NSArray arrayWithObject:self.pictureTaked]];
+    //[waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+    [SVProgressHUD dismiss];
+    if (addProduct)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+        [SVProgressHUD showSuccessWithStatus:@"Ajout réussi"];
+    }
+    else
+    {
+        [SVProgressHUD showErrorWithStatus:@"Échec lors de l'ajout"];
+    }
 }
 
 #pragma mark - Image Picker delegate
@@ -485,11 +506,11 @@
         previousFrame.size.height = ceil(((float)arrayProduits.count)/4)*80;
         if (arrayProduits.count > 0)
         {
-            produitsLabel.text = [NSString stringWithFormat:@"   Lier des articles (%i)",arrayProduits.count];
+            produitsLabel.text = [NSString stringWithFormat:@"   Lier des articles (%i)",5-arrayProduits.count];
         }
         else
         {
-            produitsLabel.text = @"   Lier des articles";
+            produitsLabel.text = @"   Lier des articles (5)";
         }
     }
     for (int i = [allElements indexOfObject:collection]+1; i < allElements.count; i++)
@@ -536,7 +557,7 @@
             [[ImageCache sharedImageCache] addImage:thumbUrl with:imgCache];
         }
         UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
-        imageV.contentMode = UIViewContentModeScaleAspectFill;
+        imageV.contentMode = UIViewContentModeScaleToFill;
         imageV.image = imgCache;
         [cell addSubview:imageV];
         UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -608,25 +629,28 @@
 
 - (void)dismissPickerView:(NSString *)text
 {
-    UILabel *pickerLabel = [allElements objectAtIndex:indexOfBouton+1];
-    pickerLabel.text = text;
+    if (text != nil)
+    {
+        UILabel *pickerLabel = [allElements objectAtIndex:indexOfBouton+1];
+        pickerLabel.text = text;
+    }
     for (int i = 0; i < self.scrollView.subviews.count; i++)
     {
         id object = [self.scrollView.subviews objectAtIndex:i];
         if ([object isKindOfClass:[UIPickerView class]])
         {
             [[self.scrollView.subviews objectAtIndex:i]  removeFromSuperview];
+            for (int i = indexOfBouton + 3; i < allElements.count; i++)
+            {
+                CGRect tempFrame = [[allElements objectAtIndex:i] frame];
+                tempFrame.origin.y -= 172;
+                [[allElements objectAtIndex:i] setFrame:tempFrame];
+            }
+            indexOfBouton = 0;
+            [self.scrollView setContentSize:CGSizeMake(320, self.scrollView.contentSize.height - 172)];
+            alreadyDismiss = NO;
         }
     }
-    for (int i = indexOfBouton + 3; i < allElements.count; i++)
-    {
-        CGRect tempFrame = [[allElements objectAtIndex:i] frame];
-        tempFrame.origin.y -= 172;
-        [[allElements objectAtIndex:i] setFrame:tempFrame];
-    }
-    indexOfBouton = 0;
-    [self.scrollView setContentSize:CGSizeMake(320, self.scrollView.contentSize.height - 172)];
-    alreadyDismiss = NO;
 }
 
 #pragma mark - TextField delegate
@@ -642,11 +666,79 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     [self.scrollView setContentOffset:CGPointMake(0, textField.frame.origin.y - 20)];
+    if (textField != textFields[0])
+    {
+        textField.text = @"#";
+    }
     return YES;
 }
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    NSString *newString = nil;
+    if (string.length == 0)
+    {
+        newString = [textField.text substringWithRange:NSMakeRange(0, textField.text.length-1)];
+    }
+    else
+    {
+        newString = [textField.text stringByAppendingString:string];
+    }
+    if (textField == textFields[0])
+    {
+        if (newString.length == 0)
+        {
+            [imageTextFields[0] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE.png"]];
+        }
+        else
+        {
+            NSString *expression = @".{1,20}";
+            NSError *error = nil;
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
+            NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+            NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textField.text options:0 range:NSMakeRange(0, textField.text.length)];
+            if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
+            {
+                [imageTextFields[0] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"]];
+                if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+                {
+                    return NO;
+                }
+            }
+            else
+            {
+                [imageTextFields[0] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE ERREUR.png"]];
+            }
+        }
+    }
+    else
+    {
+        int index = [textFields indexOfObject:textField];
+        if (newString.length == 0)
+        {
+            [imageTextFields[index] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE.png"]];
+        }
+        else
+        {
+            NSString *expression = @"[#]{1}[a-zA-Z0-9àâéèêôùûç]{1,20}";
+            NSError *error = nil;
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
+            NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+            NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textField.text options:0 range:NSMakeRange(0, textField.text.length)];
+            if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
+            {
+                [imageTextFields[index] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"]];
+                if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+                {
+                    return NO;
+                }
+            }
+            else
+            {
+                [imageTextFields[index] setImage:[UIImage imageNamed:@"BOUTON CHAMP LIBRE ERREUR.png"]];
+            }
+        }
+    }
     return YES;
 }
 
@@ -661,23 +753,55 @@
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
-    /*textView.text = @"   ";
-    textView.textColor = [UIColor colorWithWhite:0.25 alpha:1];*/
+    textViewImage.image = [UIImage imageNamed:@"LAIUS-2.png"];
     return YES;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    /*if ([textView.text isEqualToString:@"   "])
+    NSString *newString = nil;
+    if (text.length == 0)
     {
-        textView.text = @"   Laïus_";
-        textView.textColor = [UIColor colorWithWhite:0.75 alpha:1];
-    }*/
+        newString = [textView.text substringWithRange:NSMakeRange(0, textView.text.length-1)];
+    }
+    else
+    {
+        newString = [textView.text stringByAppendingString:text];
+    }
     if ([text isEqualToString:@"\n"])
     {
         [textView resignFirstResponder];
+        if (newString.length == 0)
+        {
+            textViewImage.image = [UIImage imageNamed:@"LAIUS.png"];
+        }
+    }
+    else
+    {
+        NSString *expression = @".{1,200}";
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
+        NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+        NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textView.text options:0 range:NSMakeRange(0, textView.text.length)];
+        if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
+        {
+            if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+            {
+                return NO;
+            }
+        }
     }
     [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 240)];
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    [textView resignFirstResponder];
+    if (textView.text.length == 0)
+    {
+        textViewImage.image = [UIImage imageNamed:@"LAIUS.png"];
+    }
     return YES;
 }
 

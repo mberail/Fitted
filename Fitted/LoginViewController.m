@@ -9,11 +9,13 @@
 #import "LoginViewController.h"
 #import "WebServices.h"
 #import "AppDelegate.h"
+#import "SVProgressHUD.h"
 
 @interface LoginViewController ()
 {
     UIAlertView *waitingDialog;
     NSTimer *cancelTimer;
+    NSString *id_facebook;
 }
 @end
 
@@ -91,7 +93,7 @@
 - (IBAction)forgottenPassword:(id)sender
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"];
+    UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"PassViewController"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -104,7 +106,7 @@
 
 - (void)proceedWithLogin
 {
-    NSString *expression = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSString *expression = @"[\\w-_.]{1,30}@[\\w-_.]{1,30}\\.[a-z]{2,6}";
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
     NSTextCheckingResult *match = [regex firstMatchInString:self.emailTextField.text options:0 range:NSMakeRange(0, self.emailTextField.text.length)];
@@ -124,8 +126,9 @@
 
 - (void)startLoginProcessWithFacebook:(BOOL)loginFB
 {
-    waitingDialog = [[UIAlertView alloc] initWithTitle:@"Connexion en cours .." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-    [waitingDialog show];
+    //waitingDialog = [[UIAlertView alloc] initWithTitle:@"Connexion en cours .." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    //[waitingDialog show];
+    [SVProgressHUD showWithStatus:@"Connexion en cours" maskType:SVProgressHUDMaskTypeBlack];
     if (loginFB)
     {
         [self performSelector:@selector(loginFacebook) withObject:nil afterDelay:0.3];
@@ -149,7 +152,8 @@
     [cancelTimer invalidate];
     if (isConnected)
     {
-        [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+        //[waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+        [SVProgressHUD dismiss];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -159,7 +163,8 @@
     {
         NSArray *parameters = [[NSArray alloc] initWithObjects:self.emailTextField.text,self.passTextField.text,nil];
         BOOL response =  [WebServices login:parameters];
-        [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+        //[waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+        [SVProgressHUD dismiss];
         if (response)
         {
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -179,11 +184,24 @@
     [cancelTimer invalidate];
     if (FBSession.activeSession.isOpen)
     {
-        [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
-        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-        [self presentViewController:nvc animated:YES completion:nil];
+        id_facebook = @"";
+        [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id<FBGraphUser> user, NSError *error)
+         {if(!error)
+         {id_facebook = user.id;}}];
+        NSLog(@"id_facebook : %@",id_facebook);
+        BOOL checkFB = [WebServices loginFacebook:id_facebook];
+        if (checkFB)
+        {
+            [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
+            UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+            [self presentViewController:nvc animated:YES completion:nil];
+        }
+        else
+        {
+            [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
+        }
     }
 }
 
@@ -198,6 +216,13 @@
     [alert show];
 }
 
+#pragma mark - Alert view delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+}
+
 #pragma mark - TextField delegate
 
 - (void)dismissKeyboard
@@ -206,7 +231,7 @@
     [self.passTextField resignFirstResponder];
 }
 
-- (void)imageTextField:(UITextField *)textField replacementString:(NSString *)newString
+- (BOOL)imageTextField:(UITextField *)textField replacementString:(NSString *)newString
 {
     if (textField == self.emailTextField)
     {
@@ -219,10 +244,15 @@
             NSString *expression = @"[\\w-_.]{1,30}@[\\w-_.]{1,30}\\.[a-z]{2,6}";
             NSError *error = nil;
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
-            NSTextCheckingResult *match = [regex firstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
-            if (match)
+            NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+            NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textField.text options:0 range:NSMakeRange(0, textField.text.length)];
+            if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
             {
                 self.imageEmail.image = [UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"];
+                if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+                {
+                    return NO;
+                }
             }
             else
             {
@@ -238,13 +268,18 @@
         }
         else
         {
-            NSString *expression = @".{4,20}";
+            NSString *expression = @".{6,20}";
             NSError *error = nil;
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression options:NSRegularExpressionCaseInsensitive error:&error];
-            NSTextCheckingResult *match = [regex firstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
-            if (match)
+            NSRange rangeNewMatch = [regex rangeOfFirstMatchInString:newString options:0 range:NSMakeRange(0, newString.length)];
+            NSRange rangeOldMatch = [regex rangeOfFirstMatchInString:textField.text options:0 range:NSMakeRange(0, textField.text.length)];
+            if (!NSEqualRanges(rangeNewMatch, NSMakeRange(NSNotFound, 0)))
             {
                 self.imagePass.image = [UIImage imageNamed:@"BOUTON CHAMP LIBRE PRET A VALIDER.png"];
+                if (NSEqualRanges(rangeNewMatch, rangeOldMatch))
+                {
+                    return NO;
+                }
             }
             else
             {
@@ -252,6 +287,7 @@
             }
         }
     }
+    return YES;
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
@@ -276,8 +312,7 @@
     {
         newString = [textField.text stringByAppendingString:string];
     }
-    [self imageTextField:textField replacementString:newString];
-    return YES;
+    return [self imageTextField:textField replacementString:newString];
 }
 
 

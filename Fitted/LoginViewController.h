@@ -10,7 +10,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <FacebookSDK/FacebookSDK.h>
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface LoginViewController : UIViewController <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageEmail;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePass;

@@ -35,6 +35,13 @@
     [self customNavigationBar];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
+#pragma mark - CustomNavigationBar
+
 - (void)customNavigationBar
 {
     self.navigationController.navigationBar.translucent = NO;
@@ -57,12 +64,12 @@
     self.navigationItem.leftBarButtonItem = backItem;
 }
 
-#pragma mark - CustomNavigationBar delegate
-
 - (void)previousView
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+#pragma mark - Assets library datasource
 
 - (void)loadGroups
 {
@@ -86,13 +93,22 @@
     };
     
     NSUInteger groupTypes = ALAssetsGroupAll;
-    [assetsLibrary enumerateGroupsWithTypes:groupTypes usingBlock:listGroupBlock failureBlock:failureBlock];
-    
+    if ([ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized)
+    {
+        [assetsLibrary enumerateGroupsWithTypes:groupTypes usingBlock:listGroupBlock failureBlock:failureBlock];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Restriction accès" message:@"Veuillez activer l'accès à la photothèque pour l'application. Réglages -> Confidentialité -> Photos -> Fitted" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - Alert view delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [super didReceiveMemoryWarning];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView datasource
