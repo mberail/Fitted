@@ -120,6 +120,7 @@
 		6612803B18B20BFB00AAB2CA /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		662833F818D662A000EC3BA2 /* UIImage+fixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+fixOrientation.h"; sourceTree = "<group>"; };
 		662833F918D662A000EC3BA2 /* UIImage+fixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+fixOrientation.m"; sourceTree = "<group>"; };
+		662833FB18D70A6100EC3BA2 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
 		662B073618B3A2D8009F07F2 /* WebServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServices.h; sourceTree = "<group>"; };
 		662B073718B3A2D8009F07F2 /* WebServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebServices.m; sourceTree = "<group>"; };
 		662B077618B6A92D009F07F2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -268,6 +269,7 @@
 		66030934186C4FEB00FD855E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				662833FB18D70A6100EC3BA2 /* libcommonCrypto.dylib */,
 				662B07A018B7C702009F07F2 /* FacebookSDK.framework */,
 				662B077618B6A92D009F07F2 /* Security.framework */,
 				66E3B11A189FCCFB00310D31 /* QuartzCore.framework */,
@@ -765,6 +767,7 @@
 					"$(inherited)",
 					/Users/mberail/Documents/iOS/Fitted/TestFlightSDK2.0.2,
 					/Users/mberail/Documents/iOS/Fitted/TestFlightSDK3.0.0,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "840816A9-E24A-4933-8078-12945A31AADF";
@@ -792,6 +795,7 @@
 					"$(inherited)",
 					/Users/mberail/Documents/iOS/Fitted/TestFlightSDK2.0.2,
 					/Users/mberail/Documents/iOS/Fitted/TestFlightSDK3.0.0,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "840816A9-E24A-4933-8078-12945A31AADF";

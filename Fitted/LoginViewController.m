@@ -184,24 +184,26 @@
     [cancelTimer invalidate];
     if (FBSession.activeSession.isOpen)
     {
-        id_facebook = @"";
-        [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id<FBGraphUser> user, NSError *error)
+        /*[FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id<FBGraphUser> user, NSError *error)
          {if(!error)
-         {id_facebook = user.id;}}];
-        NSLog(@"id_facebook : %@",id_facebook);
-        BOOL checkFB = [WebServices loginFacebook:id_facebook];
-        if (checkFB)
-        {
-            [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
-            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
-            UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-            [self presentViewController:nvc animated:YES completion:nil];
-        }
-        else
-        {
-            [waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
-        }
+         {
+             BOOL checkFB = [WebServices loginFacebook:user.id];
+             if (checkFB)
+             {
+                 [SVProgressHUD dismiss];
+                 UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                 UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
+                 UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+                 [self presentViewController:nvc animated:YES completion:nil];
+             }
+             else
+             {
+                 [[[UIAlertView alloc] initWithTitle:@"Erreur connexion" message:@"Veuillez vous créer un compte sur le site www.fitted.fr afin d'utiliser l'application." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+             }}}];*/
+        
+        //enlever les 2 lignes quand facebookConnectMobile sera OK
+        [SVProgressHUD dismiss];
+        [[[UIAlertView alloc] initWithTitle:@"Erreur connexion" message:@"Veuillez vous créer un compte sur le site www.fitted.fr afin d'utiliser l'application." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }
 }
 

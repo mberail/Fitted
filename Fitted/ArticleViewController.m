@@ -320,7 +320,7 @@
     [validerBouton addTarget:self action:@selector(proceedWithAddProduct) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:validerBouton];
     
-    [self.scrollView setContentSize:CGSizeMake(320, 1055)];
+    [self.scrollView setContentSize:CGSizeMake(320, 1056)];
     
     allElements = [[NSMutableArray alloc] initWithObjects:titreImage,titreTextField,genreBouton,genreLabelPicker,genreLabel,natureBouton,natureLabelPicker,natureLabel,typeBouton,typeLabelPicker,typeLabel,tailleImage,tailleTextField,marqueImage,marqueTextField,couleurImage,colorLabel,collectionColor,prixImage,prixTextField,saisonBouton,saisonLabelPicker,saisonLabel,collectionPhoto,photoBouton,photoLabel,collectionProduits,produitsLabel,produitsBouton,textViewImage,detailTextView,validerBouton, nil];
     arrayLabels = [NSArray arrayWithObjects:genreLabelPicker,natureLabelPicker,typeLabelPicker,saisonLabelPicker, nil];

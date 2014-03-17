@@ -476,7 +476,7 @@
 
 - (void)addProductWebServices:(NSDictionary *)products
 {
-    BOOL addProduct = [WebServices addProduct:products with:[NSArray arrayWithObject:self.pictureTaked]];
+    BOOL addProduct = [WebServices addInspiration:products with:[NSArray arrayWithObject:self.pictureTaked]];
     //[waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
     [SVProgressHUD dismiss];
     if (addProduct)

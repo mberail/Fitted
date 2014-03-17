@@ -11,6 +11,20 @@
 
 @implementation WebServices
 
++ (NSString *)md5:(NSString *)input
+{
+    const char *cStr = [input UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5( cStr, strlen(cStr), digest ); // This is the md5 call
+    
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [output appendFormat:@"%02x", digest[i]];
+    
+    return  output;
+}
+
 + (NSString *)base64forData:(NSData *)theData
 {
     const uint8_t* input = (const uint8_t*)[theData bytes];
@@ -110,7 +124,6 @@
 
 + (id)sendDataByGetAtUrl:(NSString *)url
 {
-    NSLog(@"url : %@",url);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSString *authStr = [NSString stringWithFormat:@"JBaise:Jfeet!IDE"];
     NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
@@ -121,7 +134,6 @@
     NSHTTPURLResponse *response = nil;
     NSError *errors = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&errors];
-    NSLog(@"responseGet : %@",[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
     return responseData;
 }
 
@@ -154,7 +166,8 @@
 {
     NSString *urlPost = [NSString stringWithFormat:@"%@connect/facebookConnectMobile",kURL];
     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] init];
-    [mutDict setObject:idFacebook forKey:@"user_profile"];
+    NSString *para = [NSString stringWithFormat:@"ad61dqsd%@6ad1sd31a",idFacebook];
+    [mutDict setObject:[self md5:para] forKey:@"user_profile"];
     if ([self sendDataByPost:mutDict atUrl:urlPost with:nil] != nil)
     {
         return 1;
@@ -172,6 +185,7 @@
 + (void)getProductsFromUser:(NSString *)pseudo
 {
     NSString *urlGet = [NSString stringWithFormat:@"%@search/loadThumbProduct?sh_owner=%@",kURL,pseudo];
+    urlGet = [urlGet stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     if ([self sendDataByGetAtUrl:urlGet] != nil)
     {
         NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:[self sendDataByGetAtUrl:urlGet] options:NSJSONReadingMutableContainers error:nil];
@@ -182,7 +196,6 @@
         }
         NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
         [pref setObject:temp forKey:@"link_products"];
-        NSLog(@"products : %i",temp.count);
         
         [self cacheThumbProducts:temp];
     }
@@ -222,8 +235,12 @@
 + (BOOL)addInspiration:(NSDictionary *)parameters with:(NSArray *)photos
 {
     NSString *postUrl = [NSString stringWithFormat:@"%@inspiration/add",kURL];
-    NSData *response = [self sendDataByPost:parameters atUrl:postUrl with:photos];
-    return 1;
+    NSString *stringData = [[NSString alloc] initWithData:[self sendDataByPost:parameters atUrl:postUrl with:photos] encoding:NSUTF8StringEncoding];
+    if ([[stringData substringWithRange:NSMakeRange(stringData.length-1, 1)] intValue] == 1)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 + (BOOL)amIConnected
