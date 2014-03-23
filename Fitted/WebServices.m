@@ -114,7 +114,6 @@
     [request setValue:@"json" forHTTPHeaderField:@"Data-Type"];
     [request addValue:[NSString stringWithFormat:@"%lu",(unsigned long)requestData.length] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:requestData];
-    
     NSHTTPURLResponse *response = nil;
     NSError *errors = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&errors];
@@ -168,12 +167,21 @@
     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] init];
     NSString *para = [NSString stringWithFormat:@"ad61dqsd%@6ad1sd31a",idFacebook];
     [mutDict setObject:[self md5:para] forKey:@"user_profile"];
-    if ([self sendDataByPost:mutDict atUrl:urlPost with:nil] != nil)
+    NSData *responseData = [self sendDataByPost:mutDict atUrl:urlPost with:nil];
+    if (responseData != nil)
     {
-        return 1;
+        NSDictionary *dictData = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
+        if (dictData.count > 1)
+        {
+            NSUserDefaults *pref = [NSUserDefaults standardUserDefaults];
+            [pref setInteger:[[dictData objectForKey:@"id"] integerValue] forKey:@"id"];
+            [pref setObject:[dictData objectForKey:@"pseudo"] forKey:@"pseudo"];
+            [pref setObject:[dictData objectForKey:@"email_address"] forKey:@"email"];
+            [self getProductsFromUser:[dictData objectForKey:@"pseudo"]];
+            return 1;
+        }
     }
-    else
-        return 0;
+    return 0;
 }
 
 + (void)logout
@@ -222,12 +230,16 @@
 + (BOOL)addProduct:(NSDictionary *)parameters with:(NSArray *)photos
 {
     NSString *postUrl = [NSString stringWithFormat:@"%@product/add",kURL];
-    NSString *stringData = [[NSString alloc] initWithData:[self sendDataByPost:parameters atUrl:postUrl with:photos] encoding:NSUTF8StringEncoding];
-    if ([[stringData substringWithRange:NSMakeRange(stringData.length-1, 1)] intValue] == 1)
+    NSData *responseData = [self sendDataByPost:parameters atUrl:postUrl with:photos];
+    if (responseData != nil && responseData.length > 0)
     {
-        NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
-        [self getProductsFromUser:[preferences objectForKey:@"pseudo"]];
-        return 1;
+        NSString *stringData = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        if ([[stringData substringWithRange:NSMakeRange(stringData.length-1, 1)] intValue] == 1)
+        {
+            NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+            [self getProductsFromUser:[preferences objectForKey:@"pseudo"]];
+            return 1;
+        }
     }
     return 0;
 }
@@ -235,10 +247,14 @@
 + (BOOL)addInspiration:(NSDictionary *)parameters with:(NSArray *)photos
 {
     NSString *postUrl = [NSString stringWithFormat:@"%@inspiration/add",kURL];
-    NSString *stringData = [[NSString alloc] initWithData:[self sendDataByPost:parameters atUrl:postUrl with:photos] encoding:NSUTF8StringEncoding];
-    if ([[stringData substringWithRange:NSMakeRange(stringData.length-1, 1)] intValue] == 1)
+    NSData *responseData = [self sendDataByPost:parameters atUrl:postUrl with:photos];
+    if (responseData != nil && responseData.length > 0)
     {
-        return 1;
+        NSString *stringData = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        if ([[stringData substringWithRange:NSMakeRange(stringData.length-1, 1)] intValue] == 1)
+        {
+            return 1;
+        }
     }
     return 0;
 }

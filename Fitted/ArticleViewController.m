@@ -41,6 +41,7 @@
     int indexOfBouton;
     BOOL addPhotoOrProduits;
     BOOL alreadyDismiss;
+    BOOL alreadyClicked;
     
     UIAlertView *waitingDialog;
     UIPickerView *currentPickerView;
@@ -78,6 +79,7 @@
     arrayProduits = [[NSMutableArray alloc] init];
     indexOfBouton = 0;
     alreadyDismiss = NO;
+    alreadyClicked = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pictureArticle) name:@"pictureArticle" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissArticle) name:@"dismissArticle" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pelliculeArticle) name:@"pelliculeArticle" object:nil];
@@ -627,6 +629,11 @@
 
 - (void)proceedWithAddProduct
 {
+    if (alreadyClicked)
+    {
+        return;
+    }
+    alreadyClicked = YES;
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     NSArray *nameTextFields = [NSArray arrayWithObjects:@"name",@"size",@"brand",@"price", nil];
     NSArray *nameLabels = [NSArray arrayWithObjects:@"gender",@"nature",@"type",@"season", nil];
@@ -662,22 +669,23 @@
         NSString *keyTemp = [NSString stringWithFormat:@"color%i",k+1];
         [parameters setObject:colorString forKey:keyTemp];
     }
-    NSMutableArray *idProducts = [[NSMutableArray alloc] init];
-    for (int l = 0; l < arrayProduits.count; l++)
-    {
-        [idProducts addObject:[arrayProduits[l] objectForKey:@"id"]];
-    }
+    [parameters setObject:@"ios" forKey:@"device"];
     if (arrayPhotos.count == 0)
     {
         [[[UIAlertView alloc] initWithTitle:@"Photo manquante" message:@"Veuillez ajouter au moins une photo de votre article." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         return;
     }
+    NSMutableArray *idProducts = [[NSMutableArray alloc] init];
+    for (int l = 0; l < arrayProduits.count; l++)
+    {
+        [idProducts addObject:[arrayProduits[l] objectForKey:@"id"]];
+    }
+    [parameters setObject:[[idProducts valueForKey:@"description"] componentsJoinedByString:@","] forKey:@"linked_thumbnails"];
+    NSLog(@"product : %@",parameters);
     for (int m = 0; m < arrayPhotos.count; m++)
     {
         [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(arrayPhotos[m], 0.5)] forKey:[NSString stringWithFormat:@"photo%i",m+1]];
     }
-    [parameters setObject:idProducts forKey:@"products_id"];
-    [parameters setObject:@"ios" forKey:@"device"];
     [self startAddProduct:parameters];
 }
 
@@ -694,6 +702,7 @@
     BOOL addProduct = [WebServices addProduct:products with:arrayPhotos];
     //[waitingDialog dismissWithClickedButtonIndex:0 animated:YES];
     [SVProgressHUD dismiss];
+    alreadyClicked = NO;
     if (addProduct)
     {
         [self.navigationController popViewControllerAnimated:YES];

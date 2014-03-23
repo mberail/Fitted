@@ -390,7 +390,7 @@
 
 - (void)addProduit
 {
-    if (arrayProduits.count < 10)
+    if (arrayProduits.count < 5)
     {
         NSArray *linkProducts = [[NSUserDefaults standardUserDefaults] objectForKey:@"link_products"];
         if (linkProducts.count != 0)
@@ -409,7 +409,7 @@
     }
     else
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Vous pouvez lier au maximum 1O articles." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Vous pouvez lier au maximum 5 articles." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     }
 }
@@ -435,7 +435,7 @@
         }
         else
         {
-            NSString *tempKey = [NSString stringWithFormat:@"tag%i",i-1];
+            NSString *tempKey = [NSString stringWithFormat:@"tag%i",i];
             [parameters setObject:[textFields[i] text] forKey:tempKey];
         }
     }
@@ -460,9 +460,10 @@
     {
         [idProducts addObject:[arrayProduits[l] objectForKey:@"id"]];
     }
-    [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(self.pictureTaked, 0.5)] forKey:@"photo1"];
-    [parameters setObject:idProducts forKey:@"products_id"];
+    [parameters setObject:[[idProducts valueForKey:@"description"] componentsJoinedByString:@","] forKey:@"products_id"];
     [parameters setObject:@"ios" forKey:@"device"];
+    NSLog(@"inspiration : %@",parameters);
+    [parameters setObject:[WebServices base64forData:UIImageJPEGRepresentation(self.pictureTaked, 0.5)] forKey:@"photo1"];
     [self startAddInspiration:parameters];
 }
 
