@@ -1164,7 +1164,16 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
+    //[self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
+    if (!alreadyClicked)
+    {
+        alreadyClicked = YES;
+        [UIView animateWithDuration:0.2
+                         animations:^{CGRect frame = self.view.frame;
+                             frame.origin.y -= 200;
+                             self.view.frame = frame;
+                         }];
+    }
     textViewImage.image = [UIImage imageNamed:@"LAIUS-2.png"];
     return YES;
 }
@@ -1209,6 +1218,15 @@
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
+    if (alreadyClicked)
+    {
+        alreadyClicked = NO;
+        [UIView animateWithDuration:0.2
+                         animations:^{CGRect frame = self.view.frame;
+                             frame.origin.y += 200;
+                             self.view.frame = frame;
+                         }];
+    }
     [textView resignFirstResponder];
     if (textView.text.length == 0)
     {

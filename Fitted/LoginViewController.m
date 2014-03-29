@@ -69,7 +69,7 @@
 - (void)customNavBar
 {
     self.navigationController.navigationBar.translucent = NO;
-	[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"HEADER-.png"] forBarMetrics:UIBarMetricsDefault];
+	[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"HEADER-7.png"] forBarMetrics:UIBarMetricsDefault];
     /*UIImage *profile = [UIImage imageNamed:@"BOUTON REGLAGE.png"];
     UIButton *profileButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, profile.size.width, profile.size.height)];
     [profileButton setBackgroundImage:profile forState:UIControlStateNormal];

@@ -20,6 +20,7 @@
         
         UIImageView *upperView = [[UIImageView alloc] initWithFrame:CGRectMake(0, frame.size.height - 100, 320, 100)];
         upperView.image = [UIImage imageNamed:@"BANDEAU PHOTO.png"];
+        upperView.opaque = NO;
         [self addSubview:upperView];
         
         UIButton *pictureButton = [[UIButton alloc] initWithFrame:CGRectMake(125, frame.size.height - 75, 70, 50)];

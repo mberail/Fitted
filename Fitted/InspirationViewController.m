@@ -28,6 +28,7 @@
     UIAlertView *waitingDialog;
     UIPickerView *currentPickerView;
     
+    BOOL alreadyClicked;
     BOOL alreadyDismiss;
     int indexOfBouton;
 }
@@ -58,8 +59,9 @@
     [self displayPicture];
     indexOfBouton = 0;
     alreadyDismiss = NO;
+    alreadyClicked = NO;
     arrayProduits = [[NSMutableArray alloc] init];
-    arrayData = [NSArray arrayWithObjects:@"Événements",@"Soirées",@"Sport",@"Plein air",@"Activité",@"Lifestyle",@"Quotidien",@"Personnes",@"Saison",@"Articles", nil];
+    arrayData = [NSArray arrayWithObjects:@"Lookbook",@"Article",@"Tendance",@"Lifestyle",@"Quotidien",@"Événement",@"Actualité",@"Saison",@"Plein air",@"Voyage", nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePicture:) name:@"receivePictureInspiration" object:nil];
 }
 
@@ -753,7 +755,16 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
+    //[self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 120)];
+    if (!alreadyClicked)
+    {
+        alreadyClicked = YES;
+        [UIView animateWithDuration:0.2
+                         animations:^{CGRect frame = self.view.frame;
+                             frame.origin.y -= 200;
+                             self.view.frame = frame;
+                         }];
+    }
     textViewImage.image = [UIImage imageNamed:@"LAIUS-2.png"];
     return YES;
 }
@@ -798,6 +809,15 @@
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
+    if (alreadyClicked)
+    {
+        alreadyClicked = NO;
+        [UIView animateWithDuration:0.2
+                         animations:^{CGRect frame = self.view.frame;
+                             frame.origin.y += 200;
+                             self.view.frame = frame;
+                         }];
+    }
     [textView resignFirstResponder];
     if (textView.text.length == 0)
     {

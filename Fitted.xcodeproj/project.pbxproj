@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6600302018E5D22F00CEBFEB /* HEADER-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6600301F18E5D22F00CEBFEB /* HEADER-@2x.png */; };
+		6600302218E5D23E00CEBFEB /* HEADER@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6600302118E5D23E00CEBFEB /* HEADER@2x.png */; };
 		66030936186C4FEB00FD855E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66030935186C4FEB00FD855E /* Foundation.framework */; };
 		66030938186C4FEB00FD855E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66030937186C4FEB00FD855E /* CoreGraphics.framework */; };
 		6603093A186C4FEB00FD855E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66030939186C4FEB00FD855E /* UIKit.framework */; };
@@ -53,7 +55,6 @@
 		66405A3018763A5C00BA60F7 /* LOGO FITTED@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66405A1718763A5C00BA60F7 /* LOGO FITTED@2x.png */; };
 		66405A3418763ACA00BA60F7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66405A3318763ACA00BA60F7 /* LoginViewController.m */; };
 		66405A36187640AB00BA60F7 /* HEADER-7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66405A35187640AB00BA60F7 /* HEADER-7@2x.png */; };
-		66405A381876F50100BA60F7 /* HEADER-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66405A371876F50100BA60F7 /* HEADER-@2x.png */; };
 		66405A3B18770AAE00BA60F7 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66405A3A18770AAE00BA60F7 /* HomeViewController.m */; };
 		66405A3E18799A6B00BA60F7 /* ArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66405A3D18799A6B00BA60F7 /* ArticleViewController.m */; };
 		66405A411879ABBA00BA60F7 /* InspirationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66405A401879ABBA00BA60F7 /* InspirationViewController.m */; };
@@ -76,7 +77,6 @@
 		66E3B11B189FCCFB00310D31 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E3B11A189FCCFB00310D31 /* QuartzCore.framework */; };
 		66E3B11D18A24FAA00310D31 /* PICTO PHOTO@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E3B11C18A24FAA00310D31 /* PICTO PHOTO@2x.png */; };
 		66E3B11F18A256DF00310D31 /* BOUTON RETOUR 2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E3B11E18A256DF00310D31 /* BOUTON RETOUR 2@2x.png */; };
-		66E3B12118A2844300310D31 /* HEADER@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E3B12018A2844300310D31 /* HEADER@2x.png */; };
 		66E5257E18C4AF4C00DDBF9B /* LAIUS@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E5257D18C4AF4C00DDBF9B /* LAIUS@2x.png */; };
 		66E5258018C4B00700DDBF9B /* FACEBOOK@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E5257F18C4B00700DDBF9B /* FACEBOOK@2x.png */; };
 		66E5258218C4B11E00DDBF9B /* Default-7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E5258118C4B11E00DDBF9B /* Default-7@2x.png */; };
@@ -100,6 +100,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6600301F18E5D22F00CEBFEB /* HEADER-@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HEADER-@2x.png"; sourceTree = "<group>"; };
+		6600302118E5D23E00CEBFEB /* HEADER@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HEADER@2x.png"; sourceTree = "<group>"; };
 		66030932186C4FEB00FD855E /* Fitted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fitted.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66030935186C4FEB00FD855E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		66030937186C4FEB00FD855E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -156,7 +158,6 @@
 		66405A3218763ACA00BA60F7 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		66405A3318763ACA00BA60F7 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		66405A35187640AB00BA60F7 /* HEADER-7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HEADER-7@2x.png"; sourceTree = "<group>"; };
-		66405A371876F50100BA60F7 /* HEADER-@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HEADER-@2x.png"; sourceTree = "<group>"; };
 		66405A3918770AAE00BA60F7 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		66405A3A18770AAE00BA60F7 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		66405A3C18799A6B00BA60F7 /* ArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleViewController.h; sourceTree = "<group>"; };
@@ -191,7 +192,6 @@
 		66E3B11A189FCCFB00310D31 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		66E3B11C18A24FAA00310D31 /* PICTO PHOTO@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PICTO PHOTO@2x.png"; sourceTree = "<group>"; };
 		66E3B11E18A256DF00310D31 /* BOUTON RETOUR 2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BOUTON RETOUR 2@2x.png"; sourceTree = "<group>"; };
-		66E3B12018A2844300310D31 /* HEADER@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HEADER@2x.png"; sourceTree = "<group>"; };
 		66E5257D18C4AF4C00DDBF9B /* LAIUS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LAIUS@2x.png"; sourceTree = "<group>"; };
 		66E5257F18C4B00700DDBF9B /* FACEBOOK@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FACEBOOK@2x.png"; sourceTree = "<group>"; };
 		66E5258118C4B11E00DDBF9B /* Default-7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-7@2x.png"; sourceTree = "<group>"; };
@@ -348,9 +348,9 @@
 				66E5257D18C4AF4C00DDBF9B /* LAIUS@2x.png */,
 				66727A5B18D4E70B002B2EC0 /* LAIUS-2@2x.png */,
 				66E5257F18C4B00700DDBF9B /* FACEBOOK@2x.png */,
+				6600301F18E5D22F00CEBFEB /* HEADER-@2x.png */,
 				66405A35187640AB00BA60F7 /* HEADER-7@2x.png */,
-				66405A371876F50100BA60F7 /* HEADER-@2x.png */,
-				66E3B12018A2844300310D31 /* HEADER@2x.png */,
+				6600302118E5D23E00CEBFEB /* HEADER@2x.png */,
 				66405A0018763A5C00BA60F7 /* BANDEAU PHOTO@2x.png */,
 				66405A0218763A5C00BA60F7 /* BOUTON ANNULER COULEUR.png */,
 				66405A0318763A5C00BA60F7 /* BOUTON CHAMP LIBRE ERREUR@2x.png */,
@@ -573,17 +573,17 @@
 				66727A5918D4E22D002B2EC0 /* SVProgressHUD.bundle in Resources */,
 				66405A2418763A5C00BA60F7 /* BOUTON MD OK SELECTION@2x.png in Resources */,
 				66CDC2D5187E1BE20088F15A /* FLECHE DROITE PAGE ACCUEIL@2x.png in Resources */,
-				66405A381876F50100BA60F7 /* HEADER-@2x.png in Resources */,
 				66405A1D18763A5C00BA60F7 /* BOUTON CHAMP LIBRE PRET A VALIDER@2x.png in Resources */,
+				6600302218E5D23E00CEBFEB /* HEADER@2x.png in Resources */,
 				66E5258018C4B00700DDBF9B /* FACEBOOK@2x.png in Resources */,
 				66E5258618C4B25800DDBF9B /* Default.png in Resources */,
 				66CDC2D6187E1BE20088F15A /* FLECHE GAUCHE PAGE ACCUEIL@2x.png in Resources */,
 				66405A1F18763A5C00BA60F7 /* BOUTON CHAMP LIBRE@2x.png in Resources */,
 				66405A2B18763A5C00BA60F7 /* BOUTON RETOUR@2x.png in Resources */,
 				66030949186C4FEB00FD855E /* Main.storyboard in Resources */,
-				66E3B12118A2844300310D31 /* HEADER@2x.png in Resources */,
 				66405A2118763A5C00BA60F7 /* BOUTON CROIX@2x.png in Resources */,
 				66405A2718763A5C00BA60F7 /* BOUTON PELLICULE@2x.png in Resources */,
+				6600302018E5D22F00CEBFEB /* HEADER-@2x.png in Resources */,
 				663307CB18D0BCA80021D88D /* Icon-7@2x.png in Resources */,
 				66727A5C18D4E70B002B2EC0 /* LAIUS-2@2x.png in Resources */,
 				66E5258418C4B23300DDBF9B /* Default@2x.png in Resources */,
